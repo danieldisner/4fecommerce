@@ -1,14 +1,18 @@
 <?php
 
+use App\DataTables\UsersDataTable;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Models\User;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
+Route::get('/dashboard', function (UsersDataTable $dataTable) {
+    $users = User::all();
+    return $dataTable->render('dashboard', ['users' => $users]);
+    return view('dashboard',compact('users'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
